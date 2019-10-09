@@ -8,7 +8,7 @@ import java.net.URL
 import java.nio.file.Paths
 import javax.imageio.ImageIO
 
-class UrPair(cr: CardResponse?, private val idolized: Boolean, scale: Float?) : NormalCard(cr, idolized, scale), Waifu2xable {
+class UrPair(cr: CardResponse?, private val idolized: Boolean, scale: Int?) : NormalCard(cr, idolized, scale), Waifu2xable {
 
     private val pairCard: Card
     private var pairCardUrl: String?

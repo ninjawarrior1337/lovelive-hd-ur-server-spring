@@ -12,12 +12,12 @@ import java.nio.file.Paths
 import javax.imageio.ImageIO
 
 
-open class NormalCard(cr: CardResponse?, idolized: Boolean, scale: Float?): Waifu2xable
+open class NormalCard(cr: CardResponse?, idolized: Boolean, scale: Int?): Waifu2xable
 {
     protected var cardUrl: String?
-    lateinit var img: BufferedImage
+    override lateinit var img: BufferedImage
     protected lateinit var card: Card
-    private val scale = scale ?: 1f
+    override val scale: Int = scale ?: 1
 
     final override var inPath: Path
     final override var outPath: Path
@@ -50,29 +50,5 @@ open class NormalCard(cr: CardResponse?, idolized: Boolean, scale: Float?): Waif
     override fun downloadImage()
     {
         img = ImageIO.read(URL("https:$cardUrl"))
-    }
-
-    override fun writeImage()
-    {
-        ImageIO.write(img, "png", inPath.toFile().outputStream())
-    }
-
-    override fun waifu2xIfy()
-    {
-        if (!inPath.toFile().exists())
-        {
-            downloadImage()
-            writeImage()
-        }
-
-        if(!outPath.toFile().exists())
-        {
-            ProcessBuilder("/usr/bin/waifu2x-converter-cpp", "-i $inPath", "-o $outPath", "--scale-ratio $scale", "--noise-level 3")
-                    .inheritIO()
-                    .start()
-                    .waitFor()
-        }
-
-        img = ImageIO.read(outPath.toFile().inputStream())
     }
 }

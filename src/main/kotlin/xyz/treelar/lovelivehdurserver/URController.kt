@@ -2,15 +2,20 @@ package xyz.treelar.lovelivehdurserver
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.getForEntity
+import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.util.UriComponentsBuilder
+import sun.net.www.content.text.Generic
+import xyz.treelar.lovelivehdurserver.assemblers.GenericImage
 import xyz.treelar.lovelivehdurserver.assemblers.NormalCard
 import xyz.treelar.lovelivehdurserver.assemblers.UrPair
 import xyz.treelar.lovelivehdurserver.data.CardResponse
 import javax.imageio.ImageIO
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -21,8 +26,8 @@ class URController
             @RequestParam(required=false, defaultValue = "", name = "id") ids: String,
             @RequestParam(required=false, defaultValue = "") search: String,
             @RequestParam(required=false, defaultValue = "true") idolized: Boolean,
-            @RequestParam(required=false, defaultValue = "1") scale: Float,
-            @RequestParam(required = false, defaultValue = "Otonokizaka Academy, ") school: String,
+            @RequestParam(required=false, defaultValue = "1") scale: Int,
+            @RequestParam(required = false, defaultValue = "Otonokizaka Academy, Uranohoshi Girls' High School") school: String,
             @RequestParam(required = false, defaultValue = "false") urpair: Boolean,
             respRq: HttpServletResponse) {
         val restTemplate = RestTemplate()
@@ -34,6 +39,7 @@ class URController
             builder.queryParam("ids", ids)
         if(search.isNotBlank())
             builder.queryParam("search", search)
+        builder.queryParam("school", school)
         builder.queryParam("ordering", "random")
         builder.queryParam("expand_ur_pair")
         builder.queryParam("rarity", "SSR,UR")
@@ -54,5 +60,19 @@ class URController
                 ImageIO.write(uc.img, "png", respRq.outputStream)
             }
         }
+    }
+
+    @PostMapping("/img", produces = ["image/png"])
+    fun img(
+            file: MultipartFile,
+            respRq: HttpServletResponse,
+            @RequestParam(required = false, defaultValue = "1") scale: Int
+    )
+    {
+        val img = ImageIO.read(file.inputStream)
+        val genericImage = GenericImage(img, scale, file.inputStream)
+        genericImage.waifu2xIfy()
+
+        ImageIO.write(genericImage.img, "png", respRq.outputStream)
     }
 }
