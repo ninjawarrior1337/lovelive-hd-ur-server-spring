@@ -5,8 +5,6 @@ import java.awt.image.BufferedImage
 import java.io.InputStream
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.security.MessageDigest
-import javax.imageio.ImageIO
 
 class GenericImage(override var img: BufferedImage, override val scale: Int, originalFile: InputStream) : Waifu2xable
 {

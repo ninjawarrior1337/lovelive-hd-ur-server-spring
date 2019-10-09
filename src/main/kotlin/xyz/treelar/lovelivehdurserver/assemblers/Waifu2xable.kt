@@ -26,13 +26,13 @@ interface Waifu2xable
             writeImage()
         }
 
-        if(!outPath.toFile().exists())
-        {
+//        if(!outPath.toFile().exists())
+//        {
             ProcessBuilder("/usr/bin/waifu2x-converter-cpp", "-i $inPath", "-o $outPath", "--scale-ratio $scale", "--noise-level 3")
                     .inheritIO()
                     .start()
                     .waitFor()
-        }
+//        }
 
         img = ImageIO.read(outPath.toFile().inputStream())
     }
