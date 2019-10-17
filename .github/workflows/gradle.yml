@@ -17,5 +17,5 @@ jobs:
       run: ./gradlew bootJar
     - uses: actions/upload-artifact@master
       with:
-        name: lovelive-hd-ur-server
-        path: build/libs/lovelive-hd-ur-server-spring.jar
+        name: love-live-hd-ur-server-0.0.1-SNAPSHOT.jar
+        path: build/libs/
