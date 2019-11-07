@@ -41,7 +41,7 @@ open class NormalCard(cr: CardResponse?, idolized: Boolean, scale: Int?): Waifu2
 
         val trialCard = cr.results.random()
 
-        return if (trialCard.cleanUr != null)
+        return if (trialCard.cleanUrIdolized != null || trialCard.cleanUr != null)
             card = trialCard
         else
             getValidCardFromList(cr)
